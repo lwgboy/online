@@ -3,6 +3,8 @@ package com.online.controller;
 import com.online.param.EssayQuestionParam;
 import com.online.result.RestResponse;
 import com.online.service.EssayQuestionService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,13 +19,15 @@ import javax.annotation.Resource;
 @RequestMapping(value = "/online/essayquestion")
 public class EssayQuestionController {
 
+    private static final Logger LOG = LogManager.getLogger(EssayQuestionController.class);
+
     @Resource
     EssayQuestionService essayQuestionService;
 
     @RequestMapping(value = "/getEssayQuestionById", method = RequestMethod.POST)
     @ResponseBody
     public RestResponse getEssayQuestionById(EssayQuestionParam param){
-//        LOG.debug("EssayQuestionController#getEssayQuestionById. param: {}", param);
+        LOG.debug("EssayQuestionController#getEssayQuestionById. param: {}", param);
         return null;
     }
 }
