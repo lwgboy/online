@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+    <!--为某个类定义别名-->
+    <!--<typeAliases>-->
+        <!--&lt;!&ndash;<package name="domain.blog"/>这种设置会将包下面的所有bean以其小写形式作为别名&ndash;&gt;-->
+        <!--<typeAlias type="com.springmvc.po.PerCourse" alias="PerCourse" />-->
+    <!--</typeAliases>-->
+    <settings>
+        <!-- 下划线命名转驼峰命名-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <environments default="development">
+        <environment id="development">
+            <!--transactionManager 事务管理器-->
+            <transactionManager type="JDBC"/>
+            <!--数据源-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/online?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF8&amp;useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="panlu"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <!--map配置文件方式mybatis操作-->
+        <!--<mapper resource="com/springmvc/mapper/PerCourse.xml"/>-->
+
+        <!--接口类型的mybatis操作-->
+        <!--<mapper class="com.online.mapper.*"/>-->
+        <!--<mapper class="com.springmvc.mapper.PerCourseMapper"/>-->
+
+        <!--包下面的mapper文件-->
+        <package name="com.online.mapper" />
+
+    </mappers>
+
+</configuration>
