@@ -17,6 +17,8 @@ public class Paging {
      */
     private Integer pageSize = 10;
 
+    private Integer pageStart = 0;
+
     public Boolean getPaging() {
         return paging;
     }
@@ -39,5 +41,13 @@ public class Paging {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Integer getPageStart() {
+        return pageStart;
+    }
+
+    public void setPageStart(Integer pageStart) {
+        this.pageStart = pageStart;
     }
 }

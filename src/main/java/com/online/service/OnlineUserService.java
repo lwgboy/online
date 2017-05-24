@@ -10,14 +10,15 @@ import java.util.List;
  * Created by panlu02 on 2017/5/2.
  */
 public interface OnlineUserService {
-    void saveUser(OnlineUserDO onlineUserDO) throws IOException;
+    int saveUser(OnlineUserDO onlineUserDO) throws IOException;
+
     int deleteUser(Long userId) throws IOException;
-    OnlineUserDO getUserByType(int type) throws IOException;
+
+    List<OnlineUserDO> getUserList(QueryOnlineUserParam param) throws IOException;
+
     int getUserType(OnlineUserDO onlineUserDO) throws IOException;
 
     OnlineUserDO getUserByStuNumberAndPasswd(OnlineUserDO onlineUserDO) throws IOException;
-
-    List<OnlineUserDO> getAdminList(QueryOnlineUserParam param) throws IOException;
 
     void updateUser(OnlineUserDO onlineUserDO) throws IOException;
 }

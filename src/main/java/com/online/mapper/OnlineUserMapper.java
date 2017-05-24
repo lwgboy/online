@@ -14,24 +14,22 @@ import java.util.List;
  */
 public interface OnlineUserMapper {
 
-    @Insert("insert into online_user values(null,#{name},#{studentNumber},#{classNo},#{telephone},#{password},#{type})")
+    @Insert("insert into online_user values(null, #{userName}, #{studentNumber}, #{classNo}, #{telephone}, #{password}, #{type})")
     int saveUser(OnlineUserDO onlineUserDO);
 
-    @Select("select * from online_user where type = #{type}")
-    OnlineUserDO getUserByType(Integer type);
-
-    @Select("select type from online_user where student_number = #{studentNumber and password = #{password}}")
+    @Select("select type from online_user where student_number = #{studentNumber} and password = #{password}")
     int getUserType(OnlineUserDO onlineUserDO);
 
     @Select("select * from online_user where student_number = #{studentNumber} and password = #{password}")
     OnlineUserDO getUserByStuNumberAndPasswd(OnlineUserDO onlineUserDO);
 
-    @Select("select * from online_user where type = 2")
-    List<OnlineUserDO> getAdminList(QueryOnlineUserParam param);
+    @Select("select * from online_user where type = #{type} limit #{pageStart}, #{pageSize}")
+    List<OnlineUserDO> getUserList(QueryOnlineUserParam param);
 
     @Delete("delete from online_user where id = #{onlineUserId}")
     int deleteUser(Long onlineUserId);
 
-    @Update("update online_user set user_name = #{userName}, student_number = #{studentNumber}, class_no = #{classNo}, telephone = #{telephone}, password = #{password} where id = #{userId}")
+    @Update("update online_user set user_name = #{userName}, student_number = #{studentNumber}, class_no = #{classNo}, telephone = #{telephone}, password = #{password},type = #{type} where id = #{userId}")
     void updateOnlineUser(OnlineUserDO onlineUserDO);
+
 }

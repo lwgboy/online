@@ -3,6 +3,8 @@ package com.online.service;
 import com.online.dao.OnlineUserDao;
 import com.online.domain.OnlineUserDO;
 import com.online.param.QueryOnlineUserParam;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,21 +17,24 @@ import java.util.List;
  */
 @Service
 public class OnlineUserServiceImp implements OnlineUserService {
+    private static final Logger LOG = LogManager.getLogger(OnlineUserService.class);
 
     @Resource
     OnlineUserDao onlineUserDao;
 
-    public void saveUser(OnlineUserDO onlineUserDO) throws IOException {
-        onlineUserDao.saveUser(onlineUserDO);
+    public int saveUser(OnlineUserDO onlineUserDO) throws IOException {
+        LOG.info("Online_userService#saveUser. opUser: {}", onlineUserDO);
+        return onlineUserDao.saveUser(onlineUserDO);
     }
 
     public int deleteUser(Long userId) throws IOException {
         return onlineUserDao.deleteUser(userId);
     }
 
-    public OnlineUserDO getUserByType(int type) throws IOException {
-        return onlineUserDao.getUserByType(type);
+    public List<OnlineUserDO> getUserList(QueryOnlineUserParam param) throws IOException {
+        return onlineUserDao.getUserList(param);
     }
+
 
     public int getUserType(OnlineUserDO onlineUserDO) throws IOException {
         return onlineUserDao.getUserType(onlineUserDO);
@@ -39,9 +44,6 @@ public class OnlineUserServiceImp implements OnlineUserService {
         return onlineUserDao.getUserByStudentNumberAndPasswd(onlineUserDO);
     }
 
-    public List<OnlineUserDO> getAdminList(QueryOnlineUserParam param) throws IOException {
-        return onlineUserDao.getAdminList(param);
-    }
 
     public void updateUser(OnlineUserDO onlineUserDO) throws IOException {
         onlineUserDao.updateUser(onlineUserDO);

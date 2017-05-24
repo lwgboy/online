@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by panlu02 on 2017/4/30.
@@ -63,7 +64,7 @@ public class OnlineUserController {
      * @param onlineUserDO
      * @return
      */
-    @RequestMapping(value = "/addAdminUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/add", method = RequestMethod.POST)
     @ResponseBody
     public RestResponse addAdminUser(@RequestBody OnlineUserDO onlineUserDO){
         LOG.debug("UserController#addAdminUser. online_user: {}", onlineUserDO);
@@ -72,6 +73,8 @@ public class OnlineUserController {
         onlineUserDO.setType(2);
         try {
             onlineUserService.saveUser(onlineUserDO);
+            restResponse.setCode(ResponseCode.OK.getCode());
+            restResponse.setMessage("添加管理员成功");
         } catch (IOException e) {
             LOG.error("保存用户出错", e);
             restResponse.setCode(ResponseCode.INTERNAL_ERROR.getCode());
@@ -86,7 +89,7 @@ public class OnlineUserController {
      * @param onlineUserDO
      * @return
      */
-    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public RestResponse updateUserById(@RequestBody OnlineUserDO onlineUserDO){
         LOG.debug("UserController#updateUser. online_user {}", onlineUserDO);
@@ -109,7 +112,7 @@ public class OnlineUserController {
      * @param param
      * @return
      */
-    @RequestMapping(value = "/deleteUserById", method = RequestMethod.POST)
+    @RequestMapping(value = "/id/delete", method = RequestMethod.POST)
     @ResponseBody
     public RestResponse deleteAdmin(@RequestBody QueryOnlineUserParam param) {
         LOG.debug("UserController#deleteAdmin QueryOnlineUserParam {}",param);
@@ -131,25 +134,26 @@ public class OnlineUserController {
     }
 
     /**
-     * 获取管理员数据列表
+     * 获取用户列表，传入参数包括用户类型
      * @return
      */
-    @RequestMapping(value = "/getAdminList", method = RequestMethod.GET)
+    @RequestMapping(value = "/type/list", method = RequestMethod.POST)
     @ResponseBody
-    public RestResponse getAdminList(){
+    public RestResponse getUserList(@RequestBody QueryOnlineUserParam param){
         LOG.debug("UserController#getAdminList ");
         RestResponse restResponse = new RestResponse();
 
-        QueryOnlineUserParam param = new QueryOnlineUserParam();
-        param.setType(2);
-        try {
-            restResponse.setData(onlineUserService.getAdminList(param));
-            restResponse.setCode(ResponseCode.OK.getCode());
-            restResponse.setMessage("获取管理员列表");
-        } catch (IOException e) {
-            restResponse.setCode(ResponseCode.OTHER.getCode());
-            restResponse.setMessage(e.getMessage());
-            e.printStackTrace();
+        if (param.getPaging()) {
+            try {
+                List<OnlineUserDO> onlineUserDOList= onlineUserService.getUserList(param);
+                restResponse.setCode(ResponseCode.OK.getCode());
+                restResponse.setMessage("获取用户列表");
+                restResponse.setData(onlineUserDOList);
+            } catch (IOException e) {
+                restResponse.setCode(ResponseCode.OTHER.getCode());
+                restResponse.setMessage(e.getMessage());
+                e.printStackTrace();
+            }
         }
         return restResponse;
     }
@@ -159,7 +163,7 @@ public class OnlineUserController {
      * @param onlineUserDO
      * @return
      */
-    @RequestMapping(value = "/addusualUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/usual/add", method = RequestMethod.POST)
     @ResponseBody
     public  RestResponse addUsualUser(@RequestBody OnlineUserDO onlineUserDO){
         LOG.debug("OnlineUserController#addUsualUser. online_user{}", onlineUserDO);
@@ -167,14 +171,19 @@ public class OnlineUserController {
         try {
             OnlineUserDO userDO = onlineUserService.getUserByStuNumberAndPasswd(onlineUserDO);
             if (userDO != null){
+                LOG.error("This user has exists, cannot add. user {}",onlineUserDO);
                 restResponse.setMessage("用户已经注册，请直接登录");
                 restResponse.setCode(ResponseCode.NOTLOGIN.getCode());
                 return restResponse;
             }
-            if (onlineUserDO.getUserName()!=null && onlineUserDO.getStudentNumber()!= null && onlineUserDO.getPassword()!=null && onlineUserDO.getClassNo()!=null && onlineUserDO.getTelephone()!=null) {
+            if ((onlineUserDO.getUserName()!=null) && (onlineUserDO.getStudentNumber()!= null) && (onlineUserDO.getPassword()!=null) && (onlineUserDO.getClassNo()!=null) && (onlineUserDO.getTelephone()!=null)) {
                 onlineUserDO.setType(3);
-                onlineUserService.saveUser(onlineUserDO);
+                if((onlineUserService.saveUser(onlineUserDO))==1) {
+                    restResponse.setCode(ResponseCode.OK.getCode());
+                    restResponse.setMessage("保存普通用户成功");
+                }
             }else {
+                LOG.error("This user add error. user {}",onlineUserDO);
                 restResponse.setMessage("注册参数错误");
                 restResponse.setCode(ResponseCode.BAD_PARAMETERS.getCode());
                 return restResponse;

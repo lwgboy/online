@@ -3,7 +3,7 @@ package com.online.param;
 /**
  * Created by panlu02 on 2017/4/30.
  */
-public class EssayQuestionParam {
+public class EssayQuestionParam extends Paging{
     private Long essayQuestionId;
 
     public Long getEssayQuestionId() {

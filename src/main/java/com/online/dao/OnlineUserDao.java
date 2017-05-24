@@ -14,13 +14,11 @@ public interface OnlineUserDao {
 
     int deleteUser(Long userId) throws IOException;
 
-    OnlineUserDO getUserByType(Integer type) throws IOException;
+    List<OnlineUserDO> getUserList(QueryOnlineUserParam param) throws IOException;
 
     int getUserType(OnlineUserDO onlineUserDO) throws IOException;
 
     OnlineUserDO getUserByStudentNumberAndPasswd(OnlineUserDO onlineUserDO) throws IOException;
-
-    List<OnlineUserDO> getAdminList(QueryOnlineUserParam param) throws IOException;
 
     void updateUser(OnlineUserDO onlineUserDO) throws IOException;
 }

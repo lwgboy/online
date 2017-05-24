@@ -18,53 +18,86 @@ public class OnlineUserDaoImp implements OnlineUserDao {
 
     public int saveUser(OnlineUserDO onlineUserDO) throws IOException {
         SqlSession sqlSession = MyBatisUtils.getSession();
+        int result = 0;
 
-        OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
-        int result = onlineUserMapper.saveUser(onlineUserDO);
+        try {
+            OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
+            result = onlineUserMapper.saveUser(onlineUserDO);
+            sqlSession.commit();
+        }finally {
+            sqlSession.close();
+        }
+
         return result;
     }
 
     public int deleteUser(Long userId) throws IOException {
         SqlSession sqlSession = MyBatisUtils.getSession();
-        OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
-        return onlineUserMapper.deleteUser(userId);
+        int result = 0;
+
+        try {
+            OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
+            result = onlineUserMapper.deleteUser(userId);
+            sqlSession.commit();
+        }finally {
+            sqlSession.close();
+        }
+
+        return result;
     }
 
-    public OnlineUserDO getUserByType(Integer type) throws IOException {
+    public List<OnlineUserDO> getUserList(QueryOnlineUserParam param) throws IOException {
         SqlSession sqlSession = MyBatisUtils.getSession();
+        List<OnlineUserDO> onlineUserDOS = null;
 
-        OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
-        OnlineUserDO onlineUserDO = onlineUserMapper.getUserByType(type);
-        return onlineUserDO;
+        try {
+            OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
+            onlineUserDOS = onlineUserMapper.getUserList(param);
+        }finally {
+            sqlSession.close();
+        }
+
+        return onlineUserDOS;
     }
 
     public int getUserType(OnlineUserDO onlineUserDO) throws IOException {
         SqlSession sqlSession = MyBatisUtils.getSession();
+        int type = 0;
 
-        OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
-        int type = onlineUserMapper.getUserType(onlineUserDO);
+        try {
+            OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
+            type = onlineUserMapper.getUserType(onlineUserDO);
+        }finally {
+            sqlSession.close();
+        }
+
         return type;
     }
 
     public OnlineUserDO getUserByStudentNumberAndPasswd(OnlineUserDO onlineUserDO) throws IOException {
         SqlSession sqlSession = MyBatisUtils.getSession();
-        OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
-        OnlineUserDO userDO = onlineUserMapper.getUserByStuNumberAndPasswd(onlineUserDO);
+        OnlineUserDO userDO = null;
+
+        try {
+            OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
+            userDO = onlineUserMapper.getUserByStuNumberAndPasswd(onlineUserDO);
+        }finally {
+            sqlSession.close();
+        }
+
         return userDO;
-    }
-
-    public List<OnlineUserDO> getAdminList(QueryOnlineUserParam param) throws IOException {
-        SqlSession sqlSession = MyBatisUtils.getSession();
-        OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
-
-        List<OnlineUserDO> onlineUserDOS = onlineUserMapper.getAdminList(param);
-        return onlineUserDOS;
     }
 
     public void updateUser(OnlineUserDO onlineUserDO) throws IOException {
         SqlSession sqlSession = MyBatisUtils.getSession();
-        OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
 
-        onlineUserMapper.updateOnlineUser(onlineUserDO);
+        try {
+            OnlineUserMapper onlineUserMapper = sqlSession.getMapper(OnlineUserMapper.class);
+            onlineUserMapper.updateOnlineUser(onlineUserDO);
+            sqlSession.commit();
+        }finally {
+            sqlSession.close();
+        }
+
     }
 }

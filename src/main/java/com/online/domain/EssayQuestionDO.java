@@ -8,8 +8,8 @@ public class EssayQuestionDO {
     private Long orderNumber;
     private String question;
     private String code;
-    private String codeResult;
-    private String answer;
+    private Long ctime;
+    private Long utime;
 
     public Long getId() {
         return id;
@@ -43,19 +43,19 @@ public class EssayQuestionDO {
         this.code = code;
     }
 
-    public String getCodeResult() {
-        return codeResult;
+    public Long getCtime() {
+        return ctime;
     }
 
-    public void setCodeResult(String codeResult) {
-        this.codeResult = codeResult;
+    public void setCtime(Long ctime) {
+        this.ctime = ctime;
     }
 
-    public String getAnswer() {
-        return answer;
+    public Long getUtime() {
+        return utime;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setUtime(Long utime) {
+        this.utime = utime;
     }
 }
